@@ -11,10 +11,15 @@
 @interface AOButton : UIControl
 
 
+@property (nonatomic, strong) UIColor *borderColor;
+
+
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
-- (void)setGradientColors:(NSArray *)colors forState:(UIControlState)state;
+- (void)setColor:(UIColor *)color forState:(UIControlState)state;
 
 - (void)setBackgroundImage:(UIImage *)image;
+
+- (void)setBackgroundColor:(UIColor *)backgroundColor;
 
 @end

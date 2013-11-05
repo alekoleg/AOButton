@@ -9,23 +9,23 @@
 #import "AOButton.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface AOButton () {
-    @private
-    
-    CALayer *_backgroundLayer;
-    CALayer *_borderLayer;
-    CAGradientLayer *_contenLayer;
-    CALayer *_imageLayer;
-    
-    
-    UIColor *_borderColor;
-    UIColor *_fillColorSelected;
-    UIColor *_fillColorNormal;
-    
+#define AOButtonScaleFactor 0.85
+#define AOButtonNormalColor [UIColor white]
+#define AOButtonSelectedColor
 
-    NSMutableDictionary *_images;
-    NSMutableDictionary *_colors;
+@interface AOButton () {
+@private
     
+	CALayer *_backgroundLayer;
+	CALayer *_borderLayer;
+	CALayer *_contenLayer;
+	CALayer *_imageLayer;
+    
+	NSMutableDictionary *_images;
+	NSMutableDictionary *_colors;
+    BOOL _isHighlighted;
+    BOOL _canAnimate;
+    UIControlState _currentState;
 }
 
 @end
@@ -33,250 +33,264 @@
 @implementation AOButton
 
 
--(id)init{
-    if (self = [super init]) {
-        [self awakeFromNib];
-    }
-    return self;
+//============================================================================================
+#pragma mark - Setup -
+//--------------------------------------------------------------------------------------------
+
+- (id)init {
+	if (self = [super init]) {
+		[self awakeFromNib];
+	}
+	return self;
 }
 
-
-- (id)initWithFrame:(CGRect)frame
-{
-
-    if (self = [super initWithFrame:frame]) {
-        [self awakeFromNib];
-        // Initialization code
-
-    }
-    return self;
+- (id)initWithFrame:(CGRect)frame {
+	if (self = [super initWithFrame:frame]) {
+		[self awakeFromNib];
+	}
+	return self;
 }
 
--(void)awakeFromNib{
-    [super awakeFromNib];
+- (void)awakeFromNib {
+	[super awakeFromNib];
+	_images = [NSMutableDictionary dictionary];
+    _currentState = self.state;
+    _canAnimate = YES;
     
-    _images = [NSMutableDictionary dictionary];
+    [self initColors];
+    
+	self.backgroundColor = [UIColor clearColor];
+    
+	_borderLayer = [CALayer new];
+	[self.layer addSublayer:_borderLayer];
+    
+	_backgroundLayer = [[CALayer alloc]init];
+	[self.layer addSublayer:_backgroundLayer];
+    
+	_contenLayer = [CALayer new];
+	[self.layer addSublayer:_contenLayer];
+    
+	_imageLayer = [CALayer new];
+	[self.layer addSublayer:_imageLayer];
+}
+
+
+- (void)initColors {
     _colors = [NSMutableDictionary dictionary];
-    self.backgroundColor = [UIColor clearColor];
-    
-    _borderLayer = [CALayer new];
-    [self.layer addSublayer:_borderLayer];
-
-    _backgroundLayer = [[CALayer alloc]init];
-    [self.layer addSublayer:_backgroundLayer];
-    
-    _contenLayer = [CAGradientLayer new];
-    [self.layer addSublayer:_contenLayer];
-    
-    _imageLayer = [CALayer new];
-    [self.layer addSublayer:_imageLayer];
-    
+    [_colors setObject:[UIColor redColor] forKey:@(UIControlStateNormal)];
+    [_colors setObject:[UIColor blueColor] forKey:@(UIControlStateSelected)];
+    [_colors setObject:[UIColor grayColor] forKey:@(UIControlStateDisabled)];
+    [_colors setObject:[UIColor purpleColor] forKey:@(UIControlStateHighlighted)];
+    //border
     _borderColor = [UIColor colorWithRed:0.16 green:0.74 blue:0.91 alpha:1];
-
-    _fillColorNormal = [UIColor blueColor];
-    _fillColorSelected = [UIColor redColor];
-    
-    UIColor *c = [UIColor colorWithRed:(42/255) green:(189/255) blue:(233/255) alpha:1];
-    
-
 }
 
 
+//============================================================================================
+#pragma mark - Layout -
+//--------------------------------------------------------------------------------------------
 
--(void)layoutSubviews{
+
+- (void)layoutSubviews {
+	CGSize size = self.frame.size;
     
-    CGSize size = self.frame.size;
+	_borderLayer.frame = CGRectMake(0, 0, size.width, size.height);
+	_borderLayer.backgroundColor = _borderColor.CGColor;
+	_borderLayer.cornerRadius = size.width * 0.5;
+	_borderLayer.masksToBounds = YES;
     
+	CGFloat borderWidth = size.width / 100 + 0.5;
+	_backgroundLayer.frame = CGRectMake(borderWidth, borderWidth, size.width - 2 * borderWidth, size.height - 2 * borderWidth);
+	_backgroundLayer.cornerRadius = _backgroundLayer.frame.size.width / 2;
     
-    _borderLayer.frame = CGRectMake(0, 0, size.width, size.height);
-    _borderLayer.backgroundColor = _borderColor.CGColor;
-    _borderLayer.cornerRadius = size.width * 0.5;
-    _borderLayer.masksToBounds = YES;
+	_contenLayer.frame = _backgroundLayer.frame;
+	_contenLayer.backgroundColor = [self colorForCurrentState].CGColor;
+	_contenLayer.cornerRadius = _backgroundLayer.cornerRadius;
     
-    CGFloat borderWidth = size.width / 100 + 0.5;
-    _backgroundLayer.frame = CGRectMake(borderWidth,borderWidth, size.width - 2*borderWidth, size.height - 2*borderWidth);
-    _backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
-    _backgroundLayer.cornerRadius = _backgroundLayer.frame.size.width/2;
-    
-    
-    _contenLayer.frame = _backgroundLayer.frame;
-    _contenLayer.backgroundColor = [self _fillContenLayerColor];
-    _contenLayer.cornerRadius = _backgroundLayer.cornerRadius;
-    
-    _imageLayer.frame = _backgroundLayer.frame;
-    _imageLayer.cornerRadius = _backgroundLayer.cornerRadius;
-    _imageLayer.contentsGravity = kCAGravityCenter;
-    
+	_imageLayer.frame = _backgroundLayer.frame;
+	_imageLayer.cornerRadius = _backgroundLayer.cornerRadius;
+	_imageLayer.contentsGravity = kCAGravityCenter;
 }
 
+//--------------------------------------------------------------------------------------------
+#pragma mark - Touch Methods -
+//============================================================================================
 
-#pragma mark - Access Private Property
-
--(CGColorRef)_fillContenLayerColor{
-    if (self.selected) {
-        return _fillColorSelected.CGColor;
-    }
-    return _fillColorNormal.CGColor;
+//- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+//    BOOL result = [super beginTrackingWithTouch:touch withEvent:event];
+//	[self animateToHighlightedState];
+//    _isHighlighted = YES;
+//	return result;
+//}
+//
+//- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+//    BOOL result = [super continueTrackingWithTouch:touch withEvent:event];
+//    if (self.highlighted != _isHighlighted) {
+//        _isHighlighted = self.highlighted;
+//        if (_isHighlighted) {
+//            [self animateToHighlightedState];
+//        } else {
+//            [self animateToNormalState];
+//        }
+//    }
+//	return result;
+//}
+//
+//- (void)cancelTrackingWithEvent:(UIEvent *)event {
+//    [super cancelTrackingWithEvent:event];
+//	[self animateToNormalState];
+//}
+//
+//- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
+//    [super endTrackingWithTouch:touch withEvent:event];
+//	[self animateToNormalState];
+////    if (_isHighlighted) {
+////        
+////    }
+////	[self updateColors];
+////	if (_images.count > 1) {
+////		[self updateImageLayer];
+////	}
+//}
+//--------------------------------------------------------------------------------------------
+#pragma mark - Animation Methods -
+//============================================================================================
+- (void)animateToHighlightedState {
+	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+	animation.fromValue = [NSValue valueWithCATransform3D:_contenLayer.transform];
+	animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(AOButtonScaleFactor, AOButtonScaleFactor, 1)];
+	animation.duration = 0.3 * _canAnimate;
+	animation.delegate = self;
+	animation.fillMode = kCAFillModeForwards;
+	animation.removedOnCompletion = NO;
+	[_contenLayer addAnimation:animation forKey:@"scale"];
+    _canAnimate = NO;
 }
 
--(CGColorRef)_unFillContenLayerColor{
-    if (!self.selected) {
-        return _fillColorSelected.CGColor;
-    }
-    return _fillColorNormal.CGColor;
+- (void)animateToNormalState {
+	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+	animation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+	animation.duration = 0.3 * _canAnimate;
+	animation.delegate = self;
+	animation.fillMode = kCAFillModeForwards;
+	animation.removedOnCompletion = NO;
+	[_contenLayer addAnimation:animation forKey:@"scaleBack"];
+    _canAnimate = NO;
 }
 
--(UIControlState)_controlstate{
-    if (self.selected) return UIControlStateSelected;
-    return UIControlStateNormal;
+- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
+    _canAnimate = YES;
 }
 
-#pragma mark - Touch Methods
-
--(BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event{
-    [self animateToHighlightedState];
-    return [super beginTrackingWithTouch:touch withEvent:event];
+//============================================================================================
+#pragma mark - Update -
+//--------------------------------------------------------------------------------------------
+- (void)updateColors {
+	CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
+	anim.fromValue = (id)_contenLayer.backgroundColor;
+	anim.toValue = (id)[self colorForCurrentState].CGColor;
+	anim.duration = 0.3;
+	anim.fillMode = kCAFillModeForwards;
+	anim.removedOnCompletion = NO;
+    _contenLayer.backgroundColor = [self colorForCurrentState].CGColor;
+	[_contenLayer addAnimation:anim forKey:@"backcolor"];
 }
 
--(BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event{
-
-    return [super continueTrackingWithTouch:touch withEvent:event];
+- (void)updateImages {
+	UIImage *image = [self imageForCurrentState];
+	if (image) {
+		CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"contents"];
+		animation.toValue = (id)image.CGImage;
+		animation.duration = 0.3;
+		animation.fillMode = kCAFillModeForwards;
+		animation.removedOnCompletion = NO;
+		[_imageLayer addAnimation:animation forKey:@"image"];
+	}
+	_imageLayer.contents = (id)image.CGImage;
 }
 
--(void)cancelTrackingWithEvent:(UIEvent *)event{
-    [self animateToNormalStateState];
-    [super cancelTrackingWithEvent:event];
+//============================================================================================
+#pragma mark - Publick API -
+//--------------------------------------------------------------------------------------------
+
+- (void)setImage:(UIImage *)image forState:(UIControlState)state {
+	if (image) {
+		[_images setObject:image forKey:@(state)];
+	}
+	else {
+		[_images removeObjectForKey:@(state)];
+	}
+	[self updateImages];
 }
 
--(void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event{
-    
-        self.selected = !self.selected;
-    
-    [self animateToNormalStateState];
-    [self updateColors];
-    if (_images.count > 1) {
-        [self updateImageLayer];
-    }
-
-    [super endTrackingWithTouch:touch withEvent:event];
-}
-
-#pragma mark - Animation Methods
--(void)animateToHighlightedState{
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-        animation.fromValue = [NSValue valueWithCATransform3D:_contenLayer.transform];
-        animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.85, 0.85, 1)];
-        animation.duration = 0.3;
-        animation.delegate = self;
-        animation.fillMode = kCAFillModeForwards;
-        animation.removedOnCompletion = NO;
-        [_contenLayer addAnimation:animation forKey:@"scale"];
-}
-
--(void)animateToNormalStateState{
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-    animation.duration = 0.3;
-    animation.delegate = self;
-    animation.fillMode = kCAFillModeForwards;
-    animation.removedOnCompletion = NO;
-    [_contenLayer addAnimation:animation forKey:@"scaleBack"];
-}
-
--(void)updateColors{
-    if (_colors.count > 1) {
-        [self updateSelectedStateForGradient];
-    }else{
-        [self updateSelectedStateForBackground];
-    }
-}
-
--(void)updateSelectedStateForBackground{
-
-    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"backgroundColor"];
-    anim.fromValue = (id)[self _unFillContenLayerColor];
-    anim.toValue = (id)[self _fillContenLayerColor];
-    anim.duration = 0.3;
-    anim.fillMode= kCAFillModeForwards;
-    anim.removedOnCompletion = NO;
-    [_contenLayer addAnimation:anim forKey:@"backcolor"];
-    
-}
-
--(void)updateSelectedStateForGradient{
-    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"contents"];
-    anim.fromValue = (id)_contenLayer.contents;
-    anim.toValue = (id)[self _gradientForContent];;
-    anim.duration = 0.3;
-    anim.fillMode= kCAFillModeForwards;
-    anim.removedOnCompletion = NO;
-    [_contenLayer addAnimation:anim forKey:@"gradient"];
-    
-    _contenLayer.contents = (id)[self _gradientForContent];
-    
-}
-
--(void)updateImageLayer{
-    UIImage *image = [_images objectForKey:@([self _controlstate])];
-    if (image) {
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"contents"];
-        animation.toValue = (id)image.CGImage;
-        animation.duration = 0.3;
-        animation.fillMode = kCAFillModeForwards;
-        animation.removedOnCompletion = NO;
-        [_imageLayer addAnimation:animation forKey:@"image"];
-    }
-    
-    _imageLayer.contents = (id)image.CGImage;
-}
-
-#pragma mark - Public API
-
--(void)setImage:(UIImage *)image forState:(UIControlState)state{
-    if (image) {
-        [_images setObject:image forKey:@(state)];
-    }else{
-        [_images removeObjectForKey:@(state)];
-    }
-    [self updateImageLayer];
-}
-
--(void)setGradientColors:(NSArray *)colors forState:(UIControlState)state{
-    if (colors.count > 1) {
-        [_colors setObject:colors forKey:@(state)];
+- (void)setColor:(UIColor *)color forState:(UIControlState)state {
+    if (color) {
+        [_colors setObject:color forKey:@(state)];
+    } else {
+        [_colors removeObjectForKey:@(state)];
     }
     [self updateColors];
 }
 
 - (void)setBackgroundImage:(UIImage *)image {
-    _contenLayer.contents = (id)image.CGImage;
+	_backgroundLayer.contents = (id)image.CGImage;
 }
 
-#pragma mark - Gradient
+- (void)setBackgroundColor:(UIColor *)backgroundColor {
+	_backgroundLayer.backgroundColor = backgroundColor.CGColor;
+}
 
--(CGImageRef)_gradientForContent{
 
-   UIGraphicsBeginImageContextWithOptions(_imageLayer.frame.size, NO, 0);
-    CGContextRef context = UIGraphicsGetCurrentContext()  ;
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    
-    NSArray *colors = _colors[@([self _controlstate])];
-    NSMutableArray *colorsRef = [NSMutableArray arrayWithCapacity:colors.count] ;
-    for (int i = 0; i < colors.count; i++) {
-        UIColor *color = [colors objectAtIndex:i];
-        [colorsRef addObject:(id)color.CGColor];
+//============================================================================================
+#pragma mark - Helpers -
+//--------------------------------------------------------------------------------------------
+
+- (UIColor *)colorForCurrentState {
+    if ([_colors objectForKey:@(self.state)]) {
+        return [_colors objectForKey:@(self.state)];
     }
-    CGFloat glossLocations[] = {0.0, 0.5};
-//    CFArrayRef colorsArray =  CFArrayCreate(NULL, (__bridge CFArrayRef)colorsRef, sizeof(colorsRef)/sizeof(CGColorRef), &kCFTypeArrayCallBacks);
+    return [_colors objectForKey:@(UIControlStateNormal)];
+}
 
-    CGGradientRef gradient =  CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colorsRef, glossLocations);
-    CGContextDrawRadialGradient(context, gradient, CGPointMake(_imageLayer.frame.size.width * 0.5, _imageLayer.frame.size.width * 0.5), 0, CGPointMake(_imageLayer.frame.size.width * 0.5, _imageLayer.frame.size.width * 0.5), _imageLayer.frame.size.width *  0.5, 0);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    
-    NSData *data = UIImagePNGRepresentation(image);
-    [data writeToFile:@"/Users/AlekOleg/Desktop/1.png" atomically:YES];
-    UIGraphicsEndImageContext();
-    return image.CGImage;
-    
+
+- (UIImage *)imageForCurrentState {
+    if ([_images objectForKey:@(self.state)]) {
+        return [_images objectForKey:@(self.state)];
+    }
+    return [_images objectForKey:@(self.state)];
+}
+
+//============================================================================================
+#pragma mark - State -
+//--------------------------------------------------------------------------------------------
+
+- (void)setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:highlighted];
+    [self updateForState:self.state];
+}
+
+- (void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+    [self updateForState:self.state];
+}
+
+- (void)setEnabled:(BOOL)enabled {
+    [super setEnabled:enabled];
+    [self updateForState:self.state];
+}
+
+- (void)updateForState:(UIControlState)state {
+    if (_currentState != self.state) {
+        if (_currentState != self.state) {
+            _currentState = self.state;
+            [self updateColors];
+            [self updateImages];
+            if (_currentState == UIControlStateHighlighted) {
+                [self animateToHighlightedState];
+            } else   {
+                [self animateToNormalState];
+            }
+        }
+    }
 }
 @end
