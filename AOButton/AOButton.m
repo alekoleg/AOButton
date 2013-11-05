@@ -24,6 +24,7 @@
 	NSMutableDictionary *_colors;
     BOOL _isHighlighted;
     BOOL _canAnimate;
+    BOOL _scaled;
     UIControlState _currentState;
 }
 
@@ -65,6 +66,7 @@
     
 	_backgroundLayer = [[CALayer alloc]init];
     _backgroundLayer.contentsScale = [[UIScreen mainScreen]scale];
+    _backgroundLayer.backgroundColor = [UIColor whiteColor].CGColor;
 	[self.layer addSublayer:_backgroundLayer];
     
 	_contenLayer = [CALayer new];
@@ -127,6 +129,7 @@
 	animation.removedOnCompletion = NO;
 	[_contenLayer addAnimation:animation forKey:@"scale"];
     _canAnimate = NO;
+    _scaled = YES;
 }
 
 - (void)animateToNormalState {
@@ -138,6 +141,7 @@
 	animation.removedOnCompletion = NO;
 	[_contenLayer addAnimation:animation forKey:@"scaleBack"];
     _canAnimate = NO;
+    _scaled = NO;
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
@@ -242,6 +246,10 @@
 }
 
 - (UIControlState)state {
+    if (!self.enabled) {
+        return UIControlStateDisabled;
+    }
+    
     if (super.state > UIControlStateSelected) {
         return UIControlStateHighlighted;
     }
@@ -253,9 +261,9 @@
         _currentState = self.state;
         [self updateColors];
         [self updateImages];
-        if (_currentState == UIControlStateHighlighted) {
+        if (_currentState == UIControlStateHighlighted && !_scaled) {
             [self animateToHighlightedState];
-        } else   {
+        } else  if (_scaled) {
             [self animateToNormalState];
         }
     }

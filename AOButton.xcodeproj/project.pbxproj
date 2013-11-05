@@ -20,7 +20,6 @@
 		B34EF53317A7BD2500381DB2 /* AOViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B34EF53117A7BD2500381DB2 /* AOViewController.xib */; };
 		B34EF53A17A7BD6B00381DB2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */; };
 		B34EF53D17A7BDA000381DB2 /* AOButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B34EF53C17A7BDA000381DB2 /* AOButton.m */; };
-		B37149DC17EE405C002BB745 /* mouses@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B37149DB17EE405C002BB745 /* mouses@2x.png */; };
 		B3D2CB031828FC0000FECCFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D2CB021828FC0000FECCFE /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +43,6 @@
 		B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B34EF53B17A7BDA000381DB2 /* AOButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOButton.h; sourceTree = "<group>"; };
 		B34EF53C17A7BDA000381DB2 /* AOButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOButton.m; sourceTree = "<group>"; };
-		B37149DB17EE405C002BB745 /* mouses@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mouses@2x.png"; sourceTree = "<group>"; };
 		B3D2CB021828FC0000FECCFE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,7 +64,6 @@
 		B34EF50A17A7BD2400381DB2 = {
 			isa = PBXGroup;
 			children = (
-				B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */,
 				B34EF51C17A7BD2500381DB2 /* AOButton */,
 				B34EF51517A7BD2500381DB2 /* Frameworks */,
 				B34EF51417A7BD2500381DB2 /* Products */,
@@ -84,6 +81,7 @@
 		B34EF51517A7BD2500381DB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */,
 				B34EF51617A7BD2500381DB2 /* UIKit.framework */,
 				B34EF51817A7BD2500381DB2 /* Foundation.framework */,
 				B34EF51A17A7BD2500381DB2 /* CoreGraphics.framework */,
@@ -110,7 +108,6 @@
 		B34EF51D17A7BD2500381DB2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B37149DB17EE405C002BB745 /* mouses@2x.png */,
 				B34EF51E17A7BD2500381DB2 /* AOButton-Info.plist */,
 				B34EF51F17A7BD2500381DB2 /* InfoPlist.strings */,
 				B34EF52217A7BD2500381DB2 /* main.m */,
@@ -180,7 +177,6 @@
 				B34EF52B17A7BD2500381DB2 /* Default@2x.png in Resources */,
 				B34EF52D17A7BD2500381DB2 /* Default-568h@2x.png in Resources */,
 				B34EF53317A7BD2500381DB2 /* AOViewController.xib in Resources */,
-				B37149DC17EE405C002BB745 /* mouses@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
