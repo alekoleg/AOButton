@@ -14,7 +14,6 @@
 #define AOButtonSelectedColor
 
 @interface AOButton () {
-@private
     
 	CALayer *_backgroundLayer;
 	CALayer *_borderLayer;
@@ -65,12 +64,15 @@
 	[self.layer addSublayer:_borderLayer];
     
 	_backgroundLayer = [[CALayer alloc]init];
+    _backgroundLayer.contentsScale = [[UIScreen mainScreen]scale];
 	[self.layer addSublayer:_backgroundLayer];
     
 	_contenLayer = [CALayer new];
+    _contenLayer.contentsScale = [[UIScreen mainScreen]scale];
 	[self.layer addSublayer:_contenLayer];
     
 	_imageLayer = [CALayer new];
+    _imageLayer.contentsScale = [[UIScreen mainScreen]scale];
 	[self.layer addSublayer:_imageLayer];
 }
 
@@ -112,46 +114,6 @@
 	_imageLayer.contentsGravity = kCAGravityCenter;
 }
 
-//--------------------------------------------------------------------------------------------
-#pragma mark - Touch Methods -
-//============================================================================================
-
-//- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-//    BOOL result = [super beginTrackingWithTouch:touch withEvent:event];
-//	[self animateToHighlightedState];
-//    _isHighlighted = YES;
-//	return result;
-//}
-//
-//- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-//    BOOL result = [super continueTrackingWithTouch:touch withEvent:event];
-//    if (self.highlighted != _isHighlighted) {
-//        _isHighlighted = self.highlighted;
-//        if (_isHighlighted) {
-//            [self animateToHighlightedState];
-//        } else {
-//            [self animateToNormalState];
-//        }
-//    }
-//	return result;
-//}
-//
-//- (void)cancelTrackingWithEvent:(UIEvent *)event {
-//    [super cancelTrackingWithEvent:event];
-//	[self animateToNormalState];
-//}
-//
-//- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event {
-//    [super endTrackingWithTouch:touch withEvent:event];
-//	[self animateToNormalState];
-////    if (_isHighlighted) {
-////        
-////    }
-////	[self updateColors];
-////	if (_images.count > 1) {
-////		[self updateImageLayer];
-////	}
-//}
 //--------------------------------------------------------------------------------------------
 #pragma mark - Animation Methods -
 //============================================================================================
@@ -257,7 +219,7 @@
     if ([_images objectForKey:@(self.state)]) {
         return [_images objectForKey:@(self.state)];
     }
-    return [_images objectForKey:@(self.state)];
+    return [_images objectForKey:@(UIControlStateNormal)];
 }
 
 //============================================================================================
@@ -279,17 +241,22 @@
     [self updateForState:self.state];
 }
 
+- (UIControlState)state {
+    if (super.state > UIControlStateSelected) {
+        return UIControlStateHighlighted;
+    }
+    return super.state;
+}
+
 - (void)updateForState:(UIControlState)state {
     if (_currentState != self.state) {
-        if (_currentState != self.state) {
-            _currentState = self.state;
-            [self updateColors];
-            [self updateImages];
-            if (_currentState == UIControlStateHighlighted) {
-                [self animateToHighlightedState];
-            } else   {
-                [self animateToNormalState];
-            }
+        _currentState = self.state;
+        [self updateColors];
+        [self updateImages];
+        if (_currentState == UIControlStateHighlighted) {
+            [self animateToHighlightedState];
+        } else   {
+            [self animateToNormalState];
         }
     }
 }

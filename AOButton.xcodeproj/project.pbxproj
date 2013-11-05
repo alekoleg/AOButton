@@ -20,9 +20,8 @@
 		B34EF53317A7BD2500381DB2 /* AOViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B34EF53117A7BD2500381DB2 /* AOViewController.xib */; };
 		B34EF53A17A7BD6B00381DB2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */; };
 		B34EF53D17A7BDA000381DB2 /* AOButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B34EF53C17A7BDA000381DB2 /* AOButton.m */; };
-		B34EF54017A7EE1200381DB2 /* rock1.png in Resources */ = {isa = PBXBuildFile; fileRef = B34EF53E17A7EE1200381DB2 /* rock1.png */; };
-		B34EF54117A7EE1200381DB2 /* rock2.png in Resources */ = {isa = PBXBuildFile; fileRef = B34EF53F17A7EE1200381DB2 /* rock2.png */; };
 		B37149DC17EE405C002BB745 /* mouses@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B37149DB17EE405C002BB745 /* mouses@2x.png */; };
+		B3D2CB031828FC0000FECCFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D2CB021828FC0000FECCFE /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,9 +44,8 @@
 		B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B34EF53B17A7BDA000381DB2 /* AOButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOButton.h; sourceTree = "<group>"; };
 		B34EF53C17A7BDA000381DB2 /* AOButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOButton.m; sourceTree = "<group>"; };
-		B34EF53E17A7EE1200381DB2 /* rock1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rock1.png; sourceTree = "<group>"; };
-		B34EF53F17A7EE1200381DB2 /* rock2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rock2.png; sourceTree = "<group>"; };
 		B37149DB17EE405C002BB745 /* mouses@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mouses@2x.png"; sourceTree = "<group>"; };
+		B3D2CB021828FC0000FECCFE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +94,6 @@
 		B34EF51C17A7BD2500381DB2 /* AOButton */ = {
 			isa = PBXGroup;
 			children = (
-				B34EF53E17A7EE1200381DB2 /* rock1.png */,
-				B34EF53F17A7EE1200381DB2 /* rock2.png */,
 				B34EF52517A7BD2500381DB2 /* AOAppDelegate.h */,
 				B34EF52617A7BD2500381DB2 /* AOAppDelegate.m */,
 				B34EF52E17A7BD2500381DB2 /* AOViewController.h */,
@@ -105,6 +101,7 @@
 				B34EF53117A7BD2500381DB2 /* AOViewController.xib */,
 				B34EF53B17A7BDA000381DB2 /* AOButton.h */,
 				B34EF53C17A7BDA000381DB2 /* AOButton.m */,
+				B3D2CB021828FC0000FECCFE /* Images.xcassets */,
 				B34EF51D17A7BD2500381DB2 /* Supporting Files */,
 			);
 			path = AOButton;
@@ -177,14 +174,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3D2CB031828FC0000FECCFE /* Images.xcassets in Resources */,
 				B34EF52117A7BD2500381DB2 /* InfoPlist.strings in Resources */,
 				B34EF52917A7BD2500381DB2 /* Default.png in Resources */,
 				B34EF52B17A7BD2500381DB2 /* Default@2x.png in Resources */,
 				B34EF52D17A7BD2500381DB2 /* Default-568h@2x.png in Resources */,
 				B34EF53317A7BD2500381DB2 /* AOViewController.xib in Resources */,
-				B34EF54017A7EE1200381DB2 /* rock1.png in Resources */,
 				B37149DC17EE405C002BB745 /* mouses@2x.png in Resources */,
-				B34EF54117A7EE1200381DB2 /* rock2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +279,8 @@
 		B34EF53717A7BD2500381DB2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AOButton/AOButton-Prefix.pch";
 				INFOPLIST_FILE = "AOButton/AOButton-Info.plist";
@@ -294,6 +292,8 @@
 		B34EF53817A7BD2500381DB2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AOButton/AOButton-Prefix.pch";
 				INFOPLIST_FILE = "AOButton/AOButton-Info.plist";

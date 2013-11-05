@@ -10,9 +10,7 @@
 
 @interface AOButton : UIControl
 
-
 @property (nonatomic, strong) UIColor *borderColor;
-
 
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
