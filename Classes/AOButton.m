@@ -10,8 +10,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 #define AOButtonScaleFactor 0.85
-#define AOButtonNormalColor [UIColor white]
-#define AOButtonSelectedColor
+//--------------------------------------------------------------------------------------------
+#define AOButtonNormalColor [UIColor redColor]
+#define AOButtonSelectedColor [UIColor blueColor]
+#define AOButtonDisableColor [UIColor grayColor]
+#define AOButtonHightlightedColor [UIColor purpleColor]
+//--------------------------------------------------------------------------------------------
+#define AOButtonBorderColor [UIColor colorWithRed:0.16 green:0.74 blue:0.91 alpha:1]
 
 @interface AOButton () {
     
@@ -75,20 +80,20 @@
     
 	_imageLayer = [CALayer new];
     _imageLayer.contentsScale = [[UIScreen mainScreen]scale];
-	[self.layer addSublayer:_imageLayer];
+	[_contenLayer addSublayer:_imageLayer];
 }
 
 
 - (void)initColors {
     _colors = [NSMutableDictionary dictionary];
-    [_colors setObject:[UIColor redColor] forKey:@(UIControlStateNormal)];
-    [_colors setObject:[UIColor blueColor] forKey:@(UIControlStateSelected)];
-    [_colors setObject:[UIColor grayColor] forKey:@(UIControlStateDisabled)];
-    [_colors setObject:[UIColor purpleColor] forKey:@(UIControlStateHighlighted)];
-    //border
-    _borderColor = [UIColor colorWithRed:0.16 green:0.74 blue:0.91 alpha:1];
-}
+    [_colors setObject:AOButtonNormalColor forKey:@(UIControlStateNormal)];
+    [_colors setObject:AOButtonSelectedColor forKey:@(UIControlStateSelected)];
+    [_colors setObject:AOButtonDisableColor forKey:@(UIControlStateDisabled)];
+    [_colors setObject:AOButtonHightlightedColor forKey:@(UIControlStateHighlighted)];
 
+    //border
+    _borderColor = AOButtonBorderColor;
+}
 
 //============================================================================================
 #pragma mark - Layout -
@@ -111,7 +116,7 @@
 	_contenLayer.backgroundColor = [self colorForCurrentState].CGColor;
 	_contenLayer.cornerRadius = _backgroundLayer.cornerRadius;
     
-	_imageLayer.frame = _backgroundLayer.frame;
+	_imageLayer.frame = _backgroundLayer.bounds;
 	_imageLayer.cornerRadius = _backgroundLayer.cornerRadius;
 	_imageLayer.contentsGravity = kCAGravityCenter;
 }

@@ -19,8 +19,8 @@
 		B34EF53017A7BD2500381DB2 /* AOViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B34EF52F17A7BD2500381DB2 /* AOViewController.m */; };
 		B34EF53317A7BD2500381DB2 /* AOViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B34EF53117A7BD2500381DB2 /* AOViewController.xib */; };
 		B34EF53A17A7BD6B00381DB2 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */; };
-		B34EF53D17A7BDA000381DB2 /* AOButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B34EF53C17A7BDA000381DB2 /* AOButton.m */; };
 		B3D2CB031828FC0000FECCFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3D2CB021828FC0000FECCFE /* Images.xcassets */; };
+		B3ECCB9F1867252900A00C3E /* AOButton.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ECCB9E1867252900A00C3E /* AOButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,9 +41,9 @@
 		B34EF52F17A7BD2500381DB2 /* AOViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AOViewController.m; sourceTree = "<group>"; };
 		B34EF53217A7BD2500381DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/AOViewController.xib; sourceTree = "<group>"; };
 		B34EF53917A7BD6B00381DB2 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		B34EF53B17A7BDA000381DB2 /* AOButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOButton.h; sourceTree = "<group>"; };
-		B34EF53C17A7BDA000381DB2 /* AOButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOButton.m; sourceTree = "<group>"; };
 		B3D2CB021828FC0000FECCFE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		B3ECCB9D1867252900A00C3E /* AOButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOButton.h; sourceTree = "<group>"; };
+		B3ECCB9E1867252900A00C3E /* AOButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +64,7 @@
 		B34EF50A17A7BD2400381DB2 = {
 			isa = PBXGroup;
 			children = (
+				B3ECCB9C1867252900A00C3E /* Classes */,
 				B34EF51C17A7BD2500381DB2 /* AOButton */,
 				B34EF51517A7BD2500381DB2 /* Frameworks */,
 				B34EF51417A7BD2500381DB2 /* Products */,
@@ -97,8 +98,6 @@
 				B34EF52E17A7BD2500381DB2 /* AOViewController.h */,
 				B34EF52F17A7BD2500381DB2 /* AOViewController.m */,
 				B34EF53117A7BD2500381DB2 /* AOViewController.xib */,
-				B34EF53B17A7BDA000381DB2 /* AOButton.h */,
-				B34EF53C17A7BDA000381DB2 /* AOButton.m */,
 				B3D2CB021828FC0000FECCFE /* Images.xcassets */,
 				B34EF51D17A7BD2500381DB2 /* Supporting Files */,
 			);
@@ -117,6 +116,16 @@
 				B34EF52C17A7BD2500381DB2 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B3ECCB9C1867252900A00C3E /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				B3ECCB9D1867252900A00C3E /* AOButton.h */,
+				B3ECCB9E1867252900A00C3E /* AOButton.m */,
+			);
+			name = Classes;
+			path = ../Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,9 +197,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B34EF52317A7BD2500381DB2 /* main.m in Sources */,
+				B3ECCB9F1867252900A00C3E /* AOButton.m in Sources */,
 				B34EF52717A7BD2500381DB2 /* AOAppDelegate.m in Sources */,
 				B34EF53017A7BD2500381DB2 /* AOViewController.m in Sources */,
-				B34EF53D17A7BDA000381DB2 /* AOButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
