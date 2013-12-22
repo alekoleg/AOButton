@@ -1,7 +1,7 @@
-# AOAds
+# AOButton
 
-[![Version](http://cocoapod-badges.herokuapp.com/v/AOAds/badge.png)](http://cocoadocs.org/docsets/AOAds)
-[![Platform](http://cocoapod-badges.herokuapp.com/p/AOAds/badge.png)](http://cocoadocs.org/docsets/AOAds)
+[![Version](http://cocoapod-badges.herokuapp.com/v/AOButton/badge.png)](http://cocoadocs.org/docsets/AOButton)
+[![Platform](http://cocoapod-badges.herokuapp.com/p/AOButton/badge.png)](http://cocoadocs.org/docsets/AOButton)
 
 ## Usage
 
@@ -11,10 +11,7 @@ To run the example project; clone the repo, and run `pod install` from the Proje
 
 ## Installation
 
-AOAds is available through [CocoaPods](http://cocoapods.org), to install
-it simply add the following line to your Podfile:
-
-    pod "AOAds"
+    pod "AOButton"
 
 ## Author
 
